@@ -1,0 +1,15 @@
+{
+   "name": "decke/phpmonitor",
+   "description": "A very simple monitoring daemon written in PHP without the bloat",
+   "homepage": "https://github.com/decke/phpmonitor",
+   "license": "BSD-3-Clause",
+   "require": {
+      "shaneharter/php-daemon": "v2.*",
+      "php": ">=5.4.0"
+   },
+   "autoload": {
+      "psr-0": {
+         "PhpMonitor": "lib"
+      }
+   }
+}

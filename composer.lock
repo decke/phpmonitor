@@ -1,0 +1,56 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
+    ],
+    "hash": "f1cdd2383c6f54e242951b04fdbc5d9b",
+    "content-hash": "8d8c22bda5247ef663732f9c8136b7cd",
+    "packages": [
+        {
+            "name": "shaneharter/php-daemon",
+            "version": "v2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/shaneharter/PHP-Daemon.git",
+                "reference": "a609d60ac9ff7db031ab05e4134e06dbf5a569fe"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/shaneharter/PHP-Daemon/zipball/a609d60ac9ff7db031ab05e4134e06dbf5a569fe",
+                "reference": "a609d60ac9ff7db031ab05e4134e06dbf5a569fe",
+                "shasum": ""
+            },
+            "require": {
+                "ext-pcntl": "*",
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Core": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Create solid, long-running PHP daemon processes",
+            "keywords": [
+                "daemon",
+                "php"
+            ],
+            "time": "2013-06-26 18:01:40"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": [],
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": {
+        "php": ">=5.4.0"
+    },
+    "platform-dev": []
+}
