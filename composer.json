@@ -5,7 +5,10 @@
    "license": "BSD-3-Clause",
    "require": {
       "shaneharter/php-daemon": "v2.*",
-      "php": ">=5.4.0"
+      "phpmailer/phpmailer": "~5.2",
+      "php": ">=5.5.0",
+      "ext-sockets": "*",
+      "ext-snmp": "*"
    },
    "autoload": {
       "psr-0": {
