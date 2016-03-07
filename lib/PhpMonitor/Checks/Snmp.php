@@ -13,6 +13,8 @@ class Snmp implements \PhpMonitor\Check
      */
     function execute($url)
     {
+        $url = explode('://', $url)[1];
+
         if(strpos($url, '@') === false)
             $url = 'public@'.$url;
 

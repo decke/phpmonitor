@@ -10,8 +10,9 @@ class Ping6 implements \PhpMonitor\Check
     /* Sends an ICMPv6 echo request (ping) to the host (IPv6 only) and
      * returns the time in milliseconds.
      */
-    function execute($host)
+    function execute($url)
     {
+        $host = explode('://', $url)[1];
         $package = "\x80\x00\x19\x2f\x00\x00\x00\x00\x70\x69\x6e\x67";
 
         /* create the socket, the last '1' denotes ICMP */   

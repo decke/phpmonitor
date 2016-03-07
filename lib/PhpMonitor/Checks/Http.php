@@ -10,7 +10,7 @@ class Http implements \PhpMonitor\Check
     /* Sends an ICMP echo request (ping) to the host (IPv4 only) and
      * returns the time in milliseconds.
      */
-    function execute($host)
+    function execute($url)
     {
         $context = stream_context_create(
             array(
@@ -23,7 +23,7 @@ class Http implements \PhpMonitor\Check
 
         $start_time = microtime(true);
 
-        if(!$fd = @fopen($host, 'rb', false, $context))
+        if(!$fd = @fopen($url, 'rb', false, $context))
         {
             return false;
         }

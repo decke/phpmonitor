@@ -35,12 +35,9 @@ class Daemon extends \Core_Daemon
 
     protected function runcheck($checkname, $url)
     {
-        $protocol = explode('://', $url)[0];
-        $host = explode('://', $url)[1];
+        $check = $this->getCheckForUrl($url);
 
-        $check = $this->getCheckForProtocol($protocol);
-
-        if(($result = $check->execute($host)) === false)
+        if(($result = $check->execute($url)) === false)
         {
             if($this->checks[$checkname]['status'] != 'down')
                 $this->checks[$checkname]['status'] = 'pending';
@@ -65,8 +62,10 @@ class Daemon extends \Core_Daemon
         }
     }
 
-    protected function getCheckForProtocol($protocol)
+    protected function getCheckForUrl($url)
     {
+        $protocol = explode('://', $url)[0];
+
         switch($protocol)
         {
             case 'ping':
