@@ -3,7 +3,7 @@
 namespace PhpMonitor\Checks;
 
 
-class Ping implements PhpMonitor\Check
+class Http implements \PhpMonitor\Check
 {
     protected $time = 0;
 
@@ -23,7 +23,7 @@ class Ping implements PhpMonitor\Check
 
         $start_time = microtime(true);
 
-        if(!$fd = fopen($host, 'rb', false, $context))
+        if(!$fd = @fopen($host, 'rb', false, $context))
         {
             return false;
         }

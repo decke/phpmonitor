@@ -3,7 +3,7 @@
 namespace PhpMonitor\Checks;
 
 
-class Ping implements PhpMonitor\Check
+class Ping implements \PhpMonitor\Check
 {
     protected $time = 0;
 

@@ -3,7 +3,7 @@
 namespace PhpMonitor\Checks;
 
 
-class Snmp implements PhpMonitor\Check
+class Snmp implements \PhpMonitor\Check
 {
     protected $time = 0;
 

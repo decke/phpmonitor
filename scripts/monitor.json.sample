@@ -1,0 +1,28 @@
+{
+	"config": {
+		"interval": 30,
+                "maxfailures": 3,
+
+                "smtp.host": "localhost",
+                "smtp.port": 25,
+                "smtp.username": "",
+                "smtp.password": "",
+
+                "mail.from": "",
+                "mail.to": ""
+	},
+	"checks": {
+		"ping-google": {
+			"url": "ping://www.google.com"
+		},
+		"ping6-google": {
+			"url": "ping6://www.google.com"
+		},
+		"http-google": {
+			"url": "http://www.google.com"
+                },
+		"https-google": {
+			"url": "https://www.google.com"
+                }
+	}
+}
