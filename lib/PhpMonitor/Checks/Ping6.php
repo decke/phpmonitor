@@ -2,8 +2,11 @@
 
 namespace PhpMonitor\Checks;
 
-class Ping
+
+class Ping6 implements PhpMonitor\Check;
 {
+    protected $time = 0;
+
     /* Sends an ICMPv6 echo request (ping) to the host (IPv6 only) and
      * returns the time in milliseconds.
      */
@@ -13,7 +16,7 @@ class Ping
 
         /* create the socket, the last '1' denotes ICMP */   
         $socket = socket_create(AF_INET6, SOCK_RAW, getprotobyname('icmp6'));
- 
+
         /* set socket receive timeout to 3 seconds */
         socket_set_option($socket, SOL_SOCKET, SO_RCVTIMEO, array('sec' => 3, 'usec' => 0));
 
@@ -31,12 +34,20 @@ class Ping
         socket_send($socket, $package, strlen($package), 0);
 
         if(@socket_read($socket, 255)) {
-            return (microtime(true) - $start_time) * 1000;
+            socket_close($socket);
+            $this->time = (microtime(true) - $start_time) * 1000;
+
+            return true;
         } else {
             return false;
         }
- 
-        socket_close($socket);
+    }
+
+    /* Returns the time in milliseconds that it took to execute the check   
+     */
+    function getTime()
+    {
+        return $this->time;
     }
 }
 
