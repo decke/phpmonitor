@@ -1,0 +1,49 @@
+#!/bin/sh
+
+# $FreeBSD$
+#
+# PROVIDE: phpmonitor
+# REQUIRE: DAEMON
+# BEFORE:  LOGIN
+# KEYWORD: shutdown
+#
+# Add the following line to /etc/rc.conf[.local] to enable phpmonitor
+#
+# phpmonitor_enable (bool):	Set to "NO" by default.
+#				Set it to "YES" to enable phpmonitor.
+
+. /etc/rc.subr
+
+name=phpmonitor
+rcvar=phpmonitor_enable
+
+command="/root/dev/phpmonitor/scripts/daemon"
+command_args="-d"
+command_interpreter="/usr/local/bin/php"
+pidfile="/var/run/${name}.pid"
+sig_stop="INT"
+
+start_cmd="${name}_start"
+
+phpmonitor_start()
+{
+	local pid
+
+	pid=$(check_pidfile $pidfile $command)
+
+	if [ -n "${pid}" ]; then
+		echo "${name} already running? (pid=${pid})."
+		return 1
+	fi
+
+	echo -n "Starting ${name}"
+	${command} -p ${pidfile} ${command_args}
+	echo '.'
+}
+
+load_rc_config $name
+
+: ${phpmonitor_enable="NO"}
+
+run_rc_command "$1"
+
