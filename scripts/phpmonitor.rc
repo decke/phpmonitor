@@ -17,7 +17,7 @@
 name=phpmonitor
 rcvar=phpmonitor_enable
 
-command="/root/dev/phpmonitor/scripts/daemon"
+command="/usr/local/www/phpmonitor/scripts/daemon"
 command_args="-d"
 command_interpreter="/usr/local/bin/php"
 pidfile="/var/run/${name}.pid"
