@@ -16,7 +16,11 @@ class Config
         if(!file_exists($file) || !is_readable($file))
             trigger_error(E_USER_ERROR, "Config file ".$file." not found!");
 
-        self::$data = json_decode(file_get_contents($file), true);
+	$content = file_get_contents($file);
+	if(!$content)
+		return false;
+
+        self::$data = json_decode($content, true);
         return true;
     }
 
