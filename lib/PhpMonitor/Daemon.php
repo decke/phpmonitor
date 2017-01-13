@@ -13,6 +13,9 @@ class Daemon extends \Core_Daemon
         $this->loop_interval = Config::get('interval');
         $this->checks = Config::getChecks();
 
+        if(!is_array($this->checks))
+            die("Config is invalid!");
+
         foreach($this->checks as $key => $value)
         {
             $this->checks[$key]['failures'] = 0;
