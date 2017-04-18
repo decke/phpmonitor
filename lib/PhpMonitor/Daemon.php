@@ -81,6 +81,9 @@ class Daemon extends \Core_Daemon
             case 'https':
                 return new \PhpMonitor\Checks\Http();
             break;
+            case 'openvpn+udp':
+                return new \PhpMonitor\Checks\OpenVPN();
+            break;
             default:
                 trigger_error('Unknown protocol '.$protocol.'. No check implementation found.', E_USER_ERROR);
             break;
