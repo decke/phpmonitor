@@ -2,6 +2,8 @@
 
 namespace PhpMonitor;
 
+use PHPMailer\PHPMailer\PHPMailer;
+
 
 class Daemon extends \Core_Daemon
 {
@@ -96,26 +98,27 @@ class Daemon extends \Core_Daemon
     {
         $this->log('Send failure notification for check '.$checkname);
 
-	$mail = new \PHPMailer;
-	$mail->isSMTP();
-	$mail->Host = Config::get('smtp.host');
-	$mail->Port = Config::get('smtp.port');
-	$mail->SMTPAuth = true;
-	$mail->Username = Config::get('smtp.username');
-	$mail->Password = Config::get('smtp.password');
-	$mail->SMTPSecure = 'tls';
-	$mail->XMailer = ' ';
-	$mail->isHTML(false);
-	$mail->CharSet = 'UTF-8';
+        $mail = new PHPMailer(true);
 
-	foreach($mail->parseAddresses(Config::get('mail.from')) as $addr)
+        $mail->isSMTP();
+        $mail->Host = Config::get('smtp.host');
+        $mail->Port = Config::get('smtp.port');
+        $mail->SMTPAuth = true;
+        $mail->Username = Config::get('smtp.username');
+        $mail->Password = Config::get('smtp.password');
+        $mail->SMTPSecure = 'tls';
+        $mail->XMailer = ' ';
+        $mail->isHTML(false);
+        $mail->CharSet = 'UTF-8';
+
+        foreach($mail->parseAddresses(Config::get('mail.from')) as $addr)
             $mail->setFrom($addr['address'], $addr['name']);
 
-	foreach($mail->parseAddresses(Config::get('mail.to')) as $addr)
+        foreach($mail->parseAddresses(Config::get('mail.to')) as $addr)
             $mail->addAddress($addr['address'], $addr['name']);
 
-	$mail->Subject = 'Check '.$checkname.' failed';
-	$mail->Body = sprintf("Check: %s\nURL: %s\nDate: %s\nStatus: %s:\nFailures: %s\n",
+        $mail->Subject = 'Check '.$checkname.' failed';
+        $mail->Body = sprintf("Check: %s\nURL: %s\nDate: %s\nStatus: %s:\nFailures: %s\n",
             $checkname, $this->checks[$checkname]['url'], date(DATE_RFC850),
             $this->checks[$checkname]['status'], $this->checks[$checkname]['failures']);
 
@@ -126,26 +129,26 @@ class Daemon extends \Core_Daemon
     {
         $this->log('Send restore notification for check '.$checkname);
 
-	$mail = new \PHPMailer;
-	$mail->isSMTP();
-	$mail->Host = Config::get('smtp.host');
-	$mail->Port = Config::get('smtp.port');
-	$mail->SMTPAuth = true;
-	$mail->Username = Config::get('smtp.username');
-	$mail->Password = Config::get('smtp.password');
-	$mail->SMTPSecure = 'tls';
-	$mail->XMailer = ' ';
-	$mail->isHTML(false);
-	$mail->CharSet = 'UTF-8';
+        $mail = new PHPMailer(true);
+        $mail->isSMTP();
+        $mail->Host = Config::get('smtp.host');
+        $mail->Port = Config::get('smtp.port');
+        $mail->SMTPAuth = true;
+        $mail->Username = Config::get('smtp.username');
+        $mail->Password = Config::get('smtp.password');
+        $mail->SMTPSecure = 'tls';
+        $mail->XMailer = ' ';
+        $mail->isHTML(false);
+        $mail->CharSet = 'UTF-8';
 
-	foreach($mail->parseAddresses(Config::get('mail.from')) as $addr)
+        foreach($mail->parseAddresses(Config::get('mail.from')) as $addr)
             $mail->setFrom($addr['address'], $addr['name']);
 
-	foreach($mail->parseAddresses(Config::get('mail.to')) as $addr)
+        foreach($mail->parseAddresses(Config::get('mail.to')) as $addr)
             $mail->addAddress($addr['address'], $addr['name']);
 
-	$mail->Subject = 'Restored check '.$checkname;
-	$mail->Body = sprintf("Check: %s\nURL: %s\nDate: %s\nStatus: %s:\n",
+        $mail->Subject = 'Restored check '.$checkname;
+        $mail->Body = sprintf("Check: %s\nURL: %s\nDate: %s\nStatus: %s:\n",
             $checkname, $this->checks[$checkname]['url'], date(DATE_RFC850),
             $this->checks[$checkname]['status']);
 
