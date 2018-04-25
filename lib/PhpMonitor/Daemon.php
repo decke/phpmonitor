@@ -20,6 +20,7 @@ class Daemon extends \Core_Daemon
 
         foreach($this->checks as $key => $value)
         {
+            $this->checks[$key]['downsince'] = time();
             $this->checks[$key]['failures'] = 0;
             $this->checks[$key]['status'] = 'unknown';
         }
@@ -51,6 +52,7 @@ class Daemon extends \Core_Daemon
             if($this->checks[$checkname]['status'] == 'pending' && $this->checks[$checkname]['failures'] > Config::get('maxfailures', 3))
             {
                 $this->checks[$checkname]['status'] = 'down';
+                $this->checks[$checkname]['downsince'] = time();
                 $this->sendFailureNotification($checkname);
             }
 
@@ -63,6 +65,7 @@ class Daemon extends \Core_Daemon
 
             $this->checks[$checkname]['status'] = 'up';
             $this->checks[$checkname]['failures'] = 0;
+            $this->checks[$checkname]['downsince'] = 0;
             $this->log(sprintf('check %s (%s) success (%d ms)', $checkname, $url, $check->getTime()));
         }
     }
@@ -118,7 +121,7 @@ class Daemon extends \Core_Daemon
             $mail->addAddress($addr['address'], $addr['name']);
 
         $mail->Subject = 'Check '.$checkname.' failed';
-        $mail->Body = sprintf("Check: %s\nURL: %s\nDate: %s\nStatus: %s:\nFailures: %s\n",
+        $mail->Body = sprintf("Check: %s\nURL: %s\nDate: %s\nStatus: %s\nFailures: %s\n",
             $checkname, $this->checks[$checkname]['url'], date(DATE_RFC850),
             $this->checks[$checkname]['status'], $this->checks[$checkname]['failures']);
 
@@ -127,7 +130,8 @@ class Daemon extends \Core_Daemon
 
     protected function sendRestoredNotification($checkname)
     {
-        $this->log('Send restore notification for check '.$checkname);
+        $downtime = time()-$this->checks[$checkname]['downsince'];
+        $this->log('Send restore notification for check '.$checkname.' (downtime '.$downtime.' seconds)');
 
         $mail = new PHPMailer(true);
         $mail->isSMTP();
@@ -148,9 +152,9 @@ class Daemon extends \Core_Daemon
             $mail->addAddress($addr['address'], $addr['name']);
 
         $mail->Subject = 'Restored check '.$checkname;
-        $mail->Body = sprintf("Check: %s\nURL: %s\nDate: %s\nStatus: %s:\n",
+        $mail->Body = sprintf("Check: %s\nURL: %s\nDate: %s\nStatus: %s\nDowntime: %d min %d sec\n",
             $checkname, $this->checks[$checkname]['url'], date(DATE_RFC850),
-            $this->checks[$checkname]['status']);
+            $this->checks[$checkname]['status'], $downtime / 60, $downtime % 60);
 
         return $mail->send();
     }
