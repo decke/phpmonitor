@@ -23,14 +23,13 @@ class Http implements \PhpMonitor\Check
 
         $start_time = microtime(true);
 
-        if(!$fd = @fopen($url, 'rb', false, $context))
-        {
+        if(!$fd = @fopen($url, 'rb', false, $context)) {
             return false;
         }
-        else
-        {
-            if(stream_get_contents($fd) === false)
+        else {
+            if(stream_get_contents($fd) === false) {
                 return false;
+            }
 
             $meta = stream_get_meta_data($fd);
 
@@ -38,10 +37,7 @@ class Http implements \PhpMonitor\Check
 
 	    $this->time = (microtime(true) - $start_time) * 1000;
 
-            if(explode(' ', $meta['wrapper_data'][0])[1] != 200)
-                return false;
-            else
-                return true;
+            return (explode(' ', $meta['wrapper_data'][0])[1] == 200);
         }
     }
 

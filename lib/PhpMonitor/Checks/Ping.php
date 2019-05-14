@@ -34,7 +34,8 @@ class Ping implements \PhpMonitor\Check
             $this->time = (microtime(true) - $start_time) * 1000;
 
             return true;
-        } else {
+        }
+        else {
             return false;
         }
     }

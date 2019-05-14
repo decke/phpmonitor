@@ -17,10 +17,12 @@ class OpenVPN implements \PhpMonitor\Check
         $urlparts = explode('://', $url)[1];
         $host = explode(':', $urlparts)[0];
 
-        if(count(explode(':', $urlparts)) < 2)
+        if(count(explode(':', $urlparts)) < 2) {
             $port = 1194;
-        else
+        }
+        else {
             $port = explode(':', $urlparts)[1];
+        }
 
         /* record start time */
         $start_time = microtime(true);
@@ -38,8 +40,7 @@ class OpenVPN implements \PhpMonitor\Check
 
         socket_sendto($socket, $package, strlen($package), 0, $host, $port);
 
-        if(socket_recvfrom($socket, $buffer, 64, 0, $host, $port) === false)
-        {
+        if(socket_recvfrom($socket, $buffer, 64, 0, $host, $port) === false) {
             socket_close($socket);
             return false;
         }

@@ -10,15 +10,18 @@ class Config
 
     public static function load($file = null)
     {
-        if($file === null)
+        if($file === null) {
             $file = self::$configfile;
+        }
 
-        if(!file_exists($file) || !is_readable($file))
+        if(!file_exists($file) || !is_readable($file)) {
             trigger_error(E_USER_ERROR, "Config file ".$file." not found!");
+        }
 
 	$content = file_get_contents($file);
-	if(!$content)
+	if(!$content) {
 		return false;
+        }
 
         self::$data = json_decode($content, true);
         return true;
@@ -26,19 +29,22 @@ class Config
 
     public static function get($property, $defaultvalue = null)
     {
-        if(self::$data === null)
+        if(self::$data === null) {
             self::load();
+        }
 
-        if(!isset(self::$data['config'][$property]))
+        if(!isset(self::$data['config'][$property])) {
             return $defaultvalue;
+        }
 
         return self::$data['config'][$property];
     }
 
     public static function getChecks()
     {
-        if(self::$data === null)
+        if(self::$data === null) {
             self::load();
+        }
 
         return self::$data['checks'];
     }

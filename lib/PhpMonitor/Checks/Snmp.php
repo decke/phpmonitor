@@ -15,11 +15,13 @@ class Snmp implements \PhpMonitor\Check
     {
         $url = explode('://', $url)[1];
 
-        if(strpos($url, '@') === false)
+        if(strpos($url, '@') === false) {
             $url = 'public@'.$url;
+        }
 
-        if(strpos($url, '/') === false)
+        if(strpos($url, '/') === false) {
             $url .= '/sysName.0';
+        }
 
         $community = explode('@', $url)[0];
         $host = explode('/', explode('@', $url)[1])[0];
@@ -28,8 +30,9 @@ class Snmp implements \PhpMonitor\Check
         /* record start time */
         $start_time = microtime(true);
 
-        if(@snmpget($host, $community, $object, 1*1000000, 3) === false)
+        if(@snmpget($host, $community, $object, 1*1000000, 3) === false) {
             return false;
+        }
 
         $this->time = (microtime(true) - $start_time) * 1000;
 

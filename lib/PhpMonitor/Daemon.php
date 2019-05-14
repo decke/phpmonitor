@@ -15,11 +15,11 @@ class Daemon extends \Core_Daemon
         $this->loop_interval = Config::get('interval');
         $this->checks = Config::getChecks();
 
-        if(!is_array($this->checks))
+        if(!is_array($this->checks)) {
             die("Config is invalid!");
+        }
 
-        foreach($this->checks as $key => $value)
-        {
+        foreach($this->checks as $key => $value) {
             $this->checks[$key]['downsince'] = time();
             $this->checks[$key]['failures'] = 0;
             $this->checks[$key]['status'] = 'unknown';
@@ -28,8 +28,7 @@ class Daemon extends \Core_Daemon
 
     protected function execute()
     {
-        foreach($this->checks as $checkname => $data)
-        {
+        foreach($this->checks as $checkname => $data) {
             $this->runcheck($checkname, $data['url']);
         }
     }
@@ -43,14 +42,12 @@ class Daemon extends \Core_Daemon
     {
         $check = $this->getCheckForUrl($url);
 
-        if(($result = $check->execute($url)) === false)
-        {
+        if(($result = $check->execute($url)) === false) {
             if($this->checks[$checkname]['status'] != 'down')
                 $this->checks[$checkname]['status'] = 'pending';
             $this->checks[$checkname]['failures']++;
 
-            if($this->checks[$checkname]['status'] == 'pending' && $this->checks[$checkname]['failures'] > Config::get('maxfailures', 3))
-            {
+            if($this->checks[$checkname]['status'] == 'pending' && $this->checks[$checkname]['failures'] > Config::get('maxfailures', 3)) {
                 $this->checks[$checkname]['status'] = 'down';
                 $this->checks[$checkname]['downsince'] = time();
                 $this->sendFailureNotification($checkname);
@@ -58,10 +55,10 @@ class Daemon extends \Core_Daemon
 
             $this->log(sprintf('check %s (%s) failed (failures=%d)', $checkname, $url, $this->checks[$checkname]['failures']));
         }
-        else
-        {
-            if($this->checks[$checkname]['status'] == 'down')
+        else {
+            if($this->checks[$checkname]['status'] == 'down') {
                 $this->sendRestoredNotification($checkname);
+            }
 
             $this->checks[$checkname]['status'] = 'up';
             $this->checks[$checkname]['failures'] = 0;
@@ -74,8 +71,7 @@ class Daemon extends \Core_Daemon
     {
         $protocol = explode('://', $url)[0];
 
-        switch($protocol)
-        {
+        switch($protocol) {
             case 'ping':
                 return new \PhpMonitor\Checks\Ping();
             case 'ping6':
@@ -114,11 +110,13 @@ class Daemon extends \Core_Daemon
         $mail->isHTML(false);
         $mail->CharSet = 'UTF-8';
 
-        foreach($mail->parseAddresses(Config::get('mail.from')) as $addr)
+        foreach($mail->parseAddresses(Config::get('mail.from')) as $addr) {
             $mail->setFrom($addr['address'], $addr['name']);
+        }
 
-        foreach($mail->parseAddresses(Config::get('mail.to')) as $addr)
+        foreach($mail->parseAddresses(Config::get('mail.to')) as $addr) {
             $mail->addAddress($addr['address'], $addr['name']);
+        }
 
         $mail->Subject = 'Check '.$checkname.' failed';
         $mail->Body = sprintf("Check: %s\nURL: %s\nDate: %s\nStatus: %s\nFailures: %s\n",
@@ -145,11 +143,13 @@ class Daemon extends \Core_Daemon
         $mail->isHTML(false);
         $mail->CharSet = 'UTF-8';
 
-        foreach($mail->parseAddresses(Config::get('mail.from')) as $addr)
+        foreach($mail->parseAddresses(Config::get('mail.from')) as $addr) {
             $mail->setFrom($addr['address'], $addr['name']);
+        }
 
-        foreach($mail->parseAddresses(Config::get('mail.to')) as $addr)
+        foreach($mail->parseAddresses(Config::get('mail.to')) as $addr) {
             $mail->addAddress($addr['address'], $addr['name']);
+        }
 
         $mail->Subject = 'Restored check '.$checkname;
         $mail->Body = sprintf("Check: %s\nURL: %s\nDate: %s\nStatus: %s\nDowntime: %d min %d sec\n",
