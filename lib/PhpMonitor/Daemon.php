@@ -42,9 +42,10 @@ class Daemon extends \Core_Daemon
     {
         $check = $this->getCheckForUrl($url);
 
-        if(($result = $check->execute($url)) === false) {
-            if($this->checks[$checkname]['status'] != 'down')
+        if($check->execute($url) === false) {
+            if($this->checks[$checkname]['status'] != 'down') {
                 $this->checks[$checkname]['status'] = 'pending';
+            }
             $this->checks[$checkname]['failures']++;
 
             if($this->checks[$checkname]['status'] == 'pending' && $this->checks[$checkname]['failures'] > Config::get('maxfailures', 3)) {
